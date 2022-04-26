@@ -11,6 +11,8 @@ import java.awt.event.ItemListener;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Stack;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -93,13 +95,14 @@ public class UI {
         num[10].setBounds(705, 170, 60, 30);
 
 
-        Timer temporizador = new Timer();
+        tiempoTimer lectorTiempo = new tiempoTimer();
         BotonIP botonIP = new BotonIP();
+        Timer temporizador = new Timer();
         for (int i = 0; i < 11; i++) {
             num[i].addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                    
-                    timer.setText(temporizador.actualizarTimer(e));
+                    timer.setText(lectorTiempo.actualizarTimer(e));
                 }
             });
         }
@@ -110,7 +113,28 @@ public class UI {
 
         botonIniciarParar.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
-                 botonIP.presionarBotonIP(timer.getText());
+                String[] cortada=timer.getText().split(":");
+                        String cortada1 = cortada[0];
+                        String cortada2 = cortada[1];
+                        String larga = cortada1+cortada2;
+                temporizador.scheduleAtFixedRate(new TimerTask() {
+                    int j =Integer.parseInt(larga);
+                    public void run(){
+                        final int medio = Integer.toString(j).length()/2;
+                        String[] cortada={Integer.toString(j).substring(0,medio),Integer.toString(j).substring(medio)};
+
+                        String cortada1 = cortada[0];
+                        String cortada2 = cortada[1];
+                        
+                        timer.setText(cortada1+":"+cortada2);
+                        j--;
+                        if(j<0){
+                            temporizador.cancel();
+                            timer.setText("00:00");
+                        }
+                    }
+                },0,1000);
+                
                 
             }
         });
