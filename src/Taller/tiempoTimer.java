@@ -36,19 +36,24 @@ public class tiempoTimer {
 
                         if (Integer.parseInt(reloj[3]) == 9) {
                             if (Integer.parseInt(reloj[1]) == 9) {
-                                reloj[0] = reloj[1];
+                                reloj[0] = "9";
+                                reloj[3] = "5";
+                                reloj[4] = "9";
                             } else {
                                reloj[0] = String.valueOf((Integer.parseInt(reloj[1]) + 1));
                                 reloj[1] = "0";
+                                reloj[3] = "0";
+                        reloj[4] = "0";
                             }
 
                         } else {
                             reloj[0]=reloj[1];
-                            reloj[1] = String.valueOf((Integer.parseInt(reloj[1]) + 1));
+                            reloj[1] = String.valueOf((Integer.parseInt(reloj[3]) + 1));
+                            reloj[3] = "0";
+                        reloj[4] = "0";
                         }
 
-                        reloj[3] = "5";
-                        reloj[4] = "9";
+                        
                     } else {
                         reloj[0] = reloj[1];
                         reloj[1] = reloj[3];

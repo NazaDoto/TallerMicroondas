@@ -3,6 +3,7 @@ package Taller;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
@@ -53,26 +54,10 @@ public class UI {
         timer.setEditable(false);
         timer.setBounds(585, 20, 180, 40);
 
-        // BOTON ABRIR/CERRAR
-        JToggleButton sensorPuerta = new JToggleButton();
-        sensorPuerta.setBounds(585, 365, 180, 80);
-        ItemListener itemListener = new ItemListener() {
-
-            public void itemStateChanged(ItemEvent itemEvent) {
-                int state = itemEvent.getStateChange();
-                if (state == ItemEvent.SELECTED) {
-                    visor.setBackground(Color.orange);
-                } else {
-                    visor.setBackground(Color.black);
-
-                }
-            }
-        };
-
         // TECLADO NUMERICO
         JButton[] num = new JButton[11];
         num[0] = new JButton("0");
-        num[0].setBounds(645, 170, 60, 30);
+        num[0].setBounds(645, 170, 60, 30);        
         num[1] = new JButton("1");
         num[1].setBounds(585, 140, 60, 30);
         num[2] = new JButton("2");
@@ -90,55 +75,60 @@ public class UI {
         num[8] = new JButton("8");
         num[8].setBounds(645, 80, 60, 30);
         num[9] = new JButton("9");
-        num[9].setBounds(705, 80, 60, 30);        
+        num[9].setBounds(705, 80, 60, 30);
         num[10] = new JButton("Reset");
         num[10].setBounds(705, 170, 60, 30);
-
-
+        JToggleButton botonIniciarParar = new JToggleButton("Iniciar / Parar");
+        botonIniciarParar.setBounds(620, 220, 120, 30);
+        botonIniciarParar.setEnabled(false);
+        botonIniciarParar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         tiempoTimer lectorTiempo = new tiempoTimer();
-        BotonIP botonIP = new BotonIP();
         Timer temporizador = new Timer();
+        BotonIP botonIP = new BotonIP(timer, temporizador, lectorTiempo, num[10], visor);
+
         for (int i = 0; i < 11; i++) {
+            num[i].setCursor(new Cursor(Cursor.HAND_CURSOR));
             num[i].addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                   
+                    if (e.getActionCommand() != "0") {
+                        botonIniciarParar.setEnabled(true);
+                    }
                     timer.setText(lectorTiempo.actualizarTimer(e));
                 }
             });
         }
 
         // BOTON INICIAR
-        JButton botonIniciarParar = new JButton("Iniciar / Parar");
-        botonIniciarParar.setBounds(620, 220, 120, 30);
 
-        botonIniciarParar.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-                String[] cortada=timer.getText().split(":");
-                        String cortada1 = cortada[0];
-                        String cortada2 = cortada[1];
-                        String larga = cortada1+cortada2;
-                temporizador.scheduleAtFixedRate(new TimerTask() {
-                    int j =Integer.parseInt(larga);
-                    public void run(){
-                        final int medio = Integer.toString(j).length()/2;
-                        String[] cortada={Integer.toString(j).substring(0,medio),Integer.toString(j).substring(medio)};
+        ItemListener itemIP = new ItemListener() {
 
-                        String cortada1 = cortada[0];
-                        String cortada2 = cortada[1];
-                        
-                        timer.setText(cortada1+":"+cortada2);
-                        j--;
-                        if(j<0){
-                            temporizador.cancel();
-                            timer.setText("00:00");
-                        }
-                    }
-                },0,1000);
-                
-                
+            public void itemStateChanged(ItemEvent itemEvent) {
+                int estadoPuerta = itemEvent.getStateChange();
+                if (estadoPuerta == ItemEvent.SELECTED) {
+                    deshabilitarNum(num);
+                    botonIP.presionarBotonIP();
+                } else {
+                    habilitarNum(num);
+                    botonIP.pararBotonIP();
+                }
             }
-        });
+        };
+        // BOTON ABRIR/CERRAR
+        JToggleButton sensorPuerta = new JToggleButton();
+        sensorPuerta.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        sensorPuerta.setBounds(585, 365, 180, 80);
+        ItemListener itemListener = new ItemListener() {
 
+            public void itemStateChanged(ItemEvent itemEvent) {
+                int estadoPuerta = itemEvent.getStateChange();
+                if (estadoPuerta == ItemEvent.SELECTED) {
+                    botonIniciarParar.setEnabled(false);
+                } else {
+                    botonIniciarParar.setEnabled(true);
+                }
+            }
+        };
+        botonIniciarParar.addItemListener(itemIP);
         sensorPuerta.addItemListener(itemListener);
         ventana.add(sensorPuerta);
         ventana.add(timer);
@@ -152,5 +142,14 @@ public class UI {
 
         ventana.setVisible(true);
     }
-
+public void deshabilitarNum(JButton[] num){
+    for(int i=0;i<11;i++){
+        num[i].setEnabled(false);
+    }
+}
+public void habilitarNum(JButton[] num){
+    for(int i=0;i<11;i++){
+        num[i].setEnabled(true);
+    }
+}
 }
