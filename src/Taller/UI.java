@@ -2,18 +2,13 @@ package Taller;
 
 import java.awt.event.ActionEvent;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Stack;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -77,6 +72,7 @@ public class UI {
         num[9] = new JButton("9");
         num[9].setBounds(705, 80, 60, 30);
         num[10] = new JButton("Reset");
+        num[10].setFont(new Font("Consolas", Font.BOLD, 9));
         num[10].setBounds(705, 170, 60, 30);
         JToggleButton botonIniciarParar = new JToggleButton("Iniciar / Parar");
         botonIniciarParar.setBounds(620, 220, 120, 30);
@@ -128,8 +124,28 @@ public class UI {
                 }
             }
         };
+
+        // ELECTRICIDAD
+        JToggleButton sensorElectricidad = new JToggleButton("🔌");
+        sensorElectricidad.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        sensorElectricidad.setBounds(20, 430, 50, 20);
+        ItemListener itemListenerElectricidad = new ItemListener() {
+
+            public void itemStateChanged(ItemEvent itemEvent) {
+                int estadoElectricidad = itemEvent.getStateChange();
+                if (estadoElectricidad == ItemEvent.SELECTED) {
+                    botonIniciarParar.setEnabled(false);
+                } else {
+                    botonIniciarParar.setEnabled(true);
+                }
+            }
+        };
+
+        
         botonIniciarParar.addItemListener(itemIP);
         sensorPuerta.addItemListener(itemListener);
+        sensorElectricidad.addItemListener(itemListenerElectricidad);
+        ventana.add(sensorElectricidad);
         ventana.add(sensorPuerta);
         ventana.add(timer);
         ventana.add(visor);
