@@ -15,19 +15,22 @@ public class BotonIP {
     tiempoTimer lectorTiempo;
     JButton num;
     JTextArea visor;
-    public BotonIP(JTextPane timer, Timer temporizador, tiempoTimer lectorTiempo, JButton num, JTextArea visor){
-        this.timer=timer;
-        this.temporizador=temporizador;
-        this.lectorTiempo=lectorTiempo;
-        this.num=num;
-        this.visor=visor;
+
+    public BotonIP(JTextPane timer, Timer temporizador, tiempoTimer lectorTiempo, JButton num, JTextArea visor) {
+        this.timer = timer;
+        this.temporizador = temporizador;
+        this.lectorTiempo = lectorTiempo;
+        this.num = num;
+        this.visor = visor;
     }
+
+    // FUNCIONAMIENTO DEL TIMER
     public void presionarBotonIP() {
         String[] cortada = timer.getText().split(":");
         String cortada1 = cortada[0];
         String cortada2 = cortada[1];
-        
-        temporizador=new Timer();
+
+        temporizador = new Timer();
         temporizador.scheduleAtFixedRate(new TimerTask() {
             int j = Integer.parseInt(cortada1);
             int k = Integer.parseInt(cortada2);
@@ -64,7 +67,5 @@ public class BotonIP {
     public void pararBotonIP() {
         temporizador.cancel();
     }
-        
-
 
 }

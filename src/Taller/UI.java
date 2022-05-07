@@ -114,7 +114,6 @@ public class UI {
         sensorPuerta.setCursor(new Cursor(Cursor.HAND_CURSOR));
         sensorPuerta.setBounds(585, 365, 180, 80);
         ItemListener itemListener = new ItemListener() {
-
             public void itemStateChanged(ItemEvent itemEvent) {
                 int estadoPuerta = itemEvent.getStateChange();
                 if (estadoPuerta == ItemEvent.SELECTED) {
@@ -129,18 +128,9 @@ public class UI {
         JToggleButton sensorElectricidad = new JToggleButton("🔌");
         sensorElectricidad.setCursor(new Cursor(Cursor.HAND_CURSOR));
         sensorElectricidad.setBounds(20, 430, 50, 20);
-        ItemListener itemListenerElectricidad = new ItemListener() {
-
-            public void itemStateChanged(ItemEvent itemEvent) {
-                int estadoElectricidad = itemEvent.getStateChange();
-                if (estadoElectricidad == ItemEvent.SELECTED) {
-                    botonIniciarParar.setEnabled(false);
-                } else {
-                    botonIniciarParar.setEnabled(true);
-                }
-            }
-        };
-
+        SensorElectricidad SE = new SensorElectricidad(timer, num, botonIniciarParar);
+        SE.start();
+        ItemListener itemListenerElectricidad =  SE.itemListener;
         
         botonIniciarParar.addItemListener(itemIP);
         sensorPuerta.addItemListener(itemListener);
